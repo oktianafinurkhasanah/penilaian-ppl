@@ -1,5 +1,11 @@
 <?php
-require '../functions.php';
+session_start();
+require '../functions.php'; 
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: ../login/");
+    exit;
+}
 
 if (!isset($_GET['id']) || !isset($_GET['pembeli'])) {
     header("Location: pembeli.php");

@@ -1,5 +1,11 @@
 <?php
+session_start();
 require '../functions.php'; 
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: ../login/");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>

@@ -1,3 +1,12 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['username'])) {
+    header("Location: ../login/index.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +49,7 @@
       gap: 25px;
       margin: 0;
       padding: 0;
+      align-items: center;
     }
 
     .navbar ul li a {
@@ -56,6 +66,12 @@
       color: #fff;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       transform: scale(1.05);
+    }
+
+    .greeting {
+      color: #fff;
+      font-weight: 600;
+      margin-right: 15px;
     }
 
     @media (max-width: 768px) {
@@ -82,9 +98,11 @@
 <div class="navbar">
   <div class="logo">あふい</div>
   <ul>
+    <li class="greeting">👋 Halo, <?= htmlspecialchars($_SESSION['username']); ?>!</li>
     <li><a href="../home/home.php">Home</a></li>
     <li><a href="../barang/barang.php">Barang</a></li>
     <li><a href="../pembeli/pembeli.php">Pembeli</a></li>
+    <li><a href="../login/logout.php">Logout</a></li>
   </ul>
 </div>
 </body>

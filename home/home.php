@@ -1,5 +1,11 @@
 <?php
-require '../functions.php';
+session_start();
+require '../functions.php'; 
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: ../login/");
+    exit;
+}
 $penjualan = tampil("
     SELECT pembelian.id_pembelian, pembeli.nama_pembeli, pembeli.no_hp, pembeli.alamat,
            barang.nama_barang, barang.stok, pembelian.jml_beli, pembelian.total_harga, pembelian.tgl_pembelian

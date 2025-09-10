@@ -1,5 +1,11 @@
 <?php
-require '../functions.php';
+session_start();
+require '../functions.php'; 
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: ../login/");
+    exit;
+}
 $barang = tampil("SELECT * FROM barang");
 if (isset($_POST['simpan'])) {   
     $id_pembeli = null;

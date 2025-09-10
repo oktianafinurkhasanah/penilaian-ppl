@@ -1,5 +1,12 @@
 <?php
+session_start();
 require '../functions.php'; 
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: ../login/");
+    exit;
+}
+
 if (isset($_GET['cari']) && $_GET['cari'] != '') {
     $cari = $_GET['cari'];
     $barang = tampil("SELECT * FROM barang WHERE nama_barang LIKE '%$cari%'");
