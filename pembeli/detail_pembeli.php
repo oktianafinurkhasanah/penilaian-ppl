@@ -96,7 +96,7 @@ $transaksi = tampil("
     <p><strong>Alamat:</strong> <?= $pembeli['alamat']; ?></p>
     <p><strong>No HP:</strong> <?= $pembeli['no_hp']; ?></p>
     <div class="action-bar">
-      <a href="edit_pembeli.php?id=<?= $pembeli['id_pembeli']; ?>" class="btn btn-edit">✏ Edit Pembeli</a>
+     
       <a href="hapus_pembeli.php?id=<?= $pembeli['id_pembeli']; ?>" class="btn btn-delete" onclick="return confirm('Hapus pembeli ini beserta semua transaksinya?');">🗑 Hapus Pembeli</a>
     </div>
   </div>

@@ -1,22 +1,32 @@
 <?php
 session_start();
-require '../functions.php'; 
+require '../auth.php';
+require '../functions.php';
 
-if (!isset($_SESSION['id_user'])) {
-    header("Location: ../login/");
+// Hanya Gudang & Admin yang boleh hapus
+checkAccess(['Gudang','Admin']);
+
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    echo "<script>
+            alert('❌ ID barang tidak valid!');
+            document.location.href = 'barang.php';
+          </script>";
     exit;
 }
 
-$id = $_GET['id'];
+$id = (int) $_GET['id'];
 
-if (mysqli_query($conn, "DELETE FROM barang WHERE id_barang = $id")) {
+$query = "DELETE FROM barang WHERE id_barang = $id";
+
+if (mysqli_query($conn, $query)) {
     echo "<script>
             alert('🗑️ Data barang berhasil dihapus!');
             document.location.href = 'barang.php';
           </script>";
 } else {
+    $error = mysqli_error($conn);
     echo "<script>
-            alert('❌ Gagal menghapus data!');
+            alert('❌ Gagal menghapus data! Error: $error');
             document.location.href = 'barang.php';
           </script>";
 }

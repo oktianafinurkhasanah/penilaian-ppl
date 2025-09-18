@@ -1,6 +1,8 @@
 <?php
 session_start();
-require '../functions.php'; 
+require '../functions.php';
+require '../auth.php';
+checkAccess(['Owner','Kasir','Admin']); 
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ../login/");

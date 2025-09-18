@@ -1,10 +1,29 @@
 <?php 
 session_start();
-require '../functions.php'; 
+require '../auth.php';
+require '../functions.php';
+checkAccess(['Gudang','Admin']); // hanya Gudang & Admin yang bisa tambah
 
-if (!isset($_SESSION['id_user'])) {
-    header("Location: ../login/");
-    exit;
+// proses tambah barang
+if (isset($_POST['submit'])) {
+    $nama_barang = htmlspecialchars($_POST['nama_barang']);
+    $stok        = (int) $_POST['stok'];
+    $harga       = (int) $_POST['harga'];
+    $gambar      = htmlspecialchars($_POST['gambar']);
+
+    $query = "INSERT INTO barang (nama_barang, stok, harga, gambar)
+              VALUES ('$nama_barang', '$stok', '$harga', '$gambar')";
+    if (mysqli_query($conn, $query)) {
+        echo "<script>
+                alert('✅ Barang berhasil ditambahkan!');
+                document.location.href = 'barang.php';
+              </script>";
+    } else {
+        $error = mysqli_error($conn);
+        echo "<script>
+                alert('❌ Gagal menambahkan barang: $error');
+              </script>";
+    }
 }
 ?>
 <!DOCTYPE html>

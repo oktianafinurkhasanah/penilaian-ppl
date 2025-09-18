@@ -1,6 +1,9 @@
 <?php
+
 session_start();
-require '../functions.php'; 
+require '../auth.php';
+require '../functions.php';
+checkAccess(['Gudang','Admin','Kasir']);
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ../login/");
@@ -10,6 +13,7 @@ if (!isset($_GET['id'])) {
     header("Location: barang.php");
     exit;
 }
+
 $id = (int)$_GET['id'];
 $barang = tampil("SELECT * FROM barang WHERE id_barang = $id");
 if (!$barang) {
@@ -17,10 +21,13 @@ if (!$barang) {
     exit;
 }
 $data = $barang[0];
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tambah = (int)$_POST['tambah_stok'];
     $stokBaru = $data['stok'] + $tambah;
-    $query = "UPDATE barang SET stok=$stokBaru WHERE id_barang=$id";
+
+    // cukup update barang, trigger akan otomatis catat log
+    $query = "UPDATE barang SET stok = $stokBaru WHERE id_barang = $id";
     if (mysqli_query($conn, $query)) {
         echo "<script>alert('Stok berhasil diperbarui');window.location='barang.php';</script>";
     } else {

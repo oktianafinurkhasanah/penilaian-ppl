@@ -1,11 +1,8 @@
 <?php
 session_start();
-require '../functions.php'; 
-
-if (!isset($_SESSION['id_user'])) {
-    header("Location: ../login/");
-    exit;
-}
+require '../auth.php';
+require '../functions.php';
+checkAccess(['Gudang','Admin','Kasir']); // tambahkan Kasir juga
 
 if (isset($_GET['cari']) && $_GET['cari'] != '') {
     $cari = $_GET['cari'];
@@ -57,6 +54,7 @@ img {
   width:70px; height:70px; object-fit:cover;
   border-radius:8px; border:2px solid #f48fb1;
 }
+.actions { display:flex; gap:6px; justify-content:center; }
 </style>
 </head>
 <body>
@@ -68,7 +66,9 @@ img {
       <input type="text" name="cari" placeholder="🔍 Cari barang..." value="<?= $_GET['cari']??'' ?>">
       <button type="submit">Cari</button>
     </form>
-    <a href="tambah_barang.php">+ Tambah Barang</a>
+    <?php if ($_SESSION['role'] === 'Gudang' || $_SESSION['role'] === 'Admin'): ?>
+      <a href="tambah_barang.php">+ Tambah Barang</a>
+    <?php endif; ?>
   </div>
   <table>
     <tr><th>ID</th><th>Nama</th><th>Stok</th><th>Harga</th><th>Gambar</th><th>Aksi</th></tr>
@@ -79,9 +79,11 @@ img {
       <td><?= $row['stok']; ?></td>
       <td>Rp <?= number_format($row['harga'],0,',','.'); ?></td>
       <td><img src="../img/<?= $row['gambar']; ?>" alt=""></td>
-      <td>
+      <td class="actions">
         <a href="detail_barang.php?id=<?= $row['id_barang']; ?>" class="btn">Detail</a>
-        <a href="edit.php?id=<?= $row['id_barang']; ?>" class="btn">Edit</a>
+        <?php if ($_SESSION['role'] === 'Gudang' || $_SESSION['role'] === 'Admin'): ?>
+          <a href="edit.php?id=<?= $row['id_barang']; ?>" class="btn">Edit</a>
+        <?php endif; ?>
       </td>
     </tr>
     <?php endforeach; else: ?>
